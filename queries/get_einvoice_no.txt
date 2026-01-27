@@ -1,0 +1,18 @@
+SELECT 
+    einvoice_no EINVOICE_NO,
+    DATE_FORMAT(created_datetime, '%m-%d-%Y') AS EINVOICE_DATE
+FROM einvoice_history
+WHERE {0}
+
+UNION ALL
+
+SELECT 
+    pos_flag1 AS einvoice_no,
+    pos_flag2 AS einvoice_date
+FROM document d
+WHERE {0}
+AND NOT EXISTS (
+    SELECT 1
+    FROM einvoice_history e
+    WHERE e.sid = d.sid
+);

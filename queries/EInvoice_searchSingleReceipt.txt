@@ -1,0 +1,15 @@
+SELECT 
+  doc_no AS RECEIPT_NO,
+  store_no AS RECEIPT_STORE,
+  invc_post_date AS RECEIPT_DATETIME,
+  transaction_total_amt AS RECEIPT_AMOUNT,
+  CAST(i.sid AS CHAR) AS INVC_SID,
+  e.einvoice_no EINVOICE_NO,
+  CONCAT(bt_first_name, ' ', bt_last_name) AS CUSTOMER_NAME,
+  CAST(i.ref_sale_sid AS CHAR) AS REF_SALE_SID
+FROM document i
+LEFT JOIN einvoice_history e 
+  ON CAST(i.sid AS CHAR) = REGEXP_SUBSTR(e.sid, '^[^/]+')
+WHERE 
+  status = 4 
+  AND {0};

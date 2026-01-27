@@ -1,0 +1,7 @@
+select nvl(d.disc_perc,0) as disc_perc, di.sid as doc_item_sid, di.row_version, di.tax_perc, di.price,
+round(di.price*(1-nvl(d.disc_perc,0)/100)/(1 + di.tax_perc/100)) as Note1,
+round(round(di.price*(1-nvl(d.disc_perc,0)/100)/(1 + di.tax_perc/100))*di.tax_perc/100) as Note2
+from rps.document d, rps.document_item di
+where d.sid = di.doc_sid
+and d.status = 4
+and {0}

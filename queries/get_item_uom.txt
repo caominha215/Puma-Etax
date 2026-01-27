@@ -1,0 +1,1 @@
+select 'Cái' as ITEM_UOM, description1 as ITEM_NAME from invn_sbs_item where {0}

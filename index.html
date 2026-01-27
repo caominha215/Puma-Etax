@@ -1,0 +1,561 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+	<!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">-->
+	<link rel="stylesheet" href="./css/bootstrap.min.css">
+
+    <title>PUMA Thailand</title>
+  </head>
+  <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS 
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+	-->
+	<!--
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+	<script src="lbc.js"></script>
+	-->
+	<script src="./js/jquery-3.2.1.min.js"></script>
+	<script src="./js/popper.min.js" ></script>
+    <script src="./js/bootstrap.min.js" ></script>
+	<script src="./js/angular.min.js"></script>
+	
+	
+  <body>
+
+    <div ng-app="myApp" ng-controller="myCtrl as ctrl" class="container-fluid">
+	  <div id ="containerID" class="container">
+		<div class="row justify-content-md-center">
+			<h2 class="text-center"><img style="width:50%" src="./pics/logo.png" class="img-thumbnail" ></h2>
+			<h3 class="text-center">FOR CUSTOMERS TO PROVIDE eTAX INFORMATION</h3>
+		</div>
+		<div class="alert alert-secondary" ng-hide="step!='SCAN'">
+			<!-- <h4 class="text-center">PLEASE SCAN THE BARCODE ON YOUR BILL</h4> -->
+			<!-- <input type="text" class="form-control" placeholder="Scan bill barcode" ng-model="receipt_sid"  -->
+			<!-- id="receipt_sid"> -->
+			<div class="alert alert-danger" role="alert" ng-if="error=='NOT FOUND'">
+			  SALE RECEPT NOT FOUND IN THE SYSTEM!
+			</div>
+			<div class="alert alert-danger" role="alert" ng-if="error=='CONNECTION FAILED'">
+				CONNECTION ERROR!
+			  </div>
+			<div class="alert alert-danger" role="alert" ng-if="error=='E-INVOICE ISSUED'">
+			  THIS SALE RECEPT HAS ALREADY BEEN ISSUED AN ETAX!
+			</div>
+		</div>
+		<div class="alert alert-primary" ng-hide="step!='INPUT'">
+			<!--<h5 class="text-center">Sales bill information for invoice issuance</h5>-->
+			<table class="table">
+			  <thead>
+				<tr>
+				  <th scope="col">Receipt No.</th>
+				  <th scope="col">Store</th>
+				  <th scope="col">Date</th>
+				  <th scope="col">Total Amount</th>
+				</tr>
+			  </thead>
+			  <tbody>
+				<tr>
+				  <td>{{receipt_no}}</td>
+				  <td>{{receipt_store}}</td>
+				  <td>{{ receipt_datetime | date:'yyyy-MM-dd' }}</td>
+				  <td>{{receipt_amount | number:0}}</td>
+				</tr>
+			  </tbody>
+			</table>
+		</div>
+		<div class="alert alert-secondary" ng-hide="step!='INPUT'">
+			<!--<h4 class="text-center">PLEASE ENTER IN VIETNAMESE WITH TONE MARKS</h4>-->
+			<div class="input-group mb-3">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Tax Code</span>
+			  </div>
+			  <input type="text" class="form-control" ng-model = "receipt_companyTaxCode">
+			  <!--<button type="button" class="btn btn-primary" ng-click="getVatInfo()" >Get Info</button>-->
+			</div>
+			<div class="input-group mb-3">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Company Name</span>
+			  </div>
+			  <input type="text" class="form-control" ng-model = "receipt_companyName ">
+			</div>
+			<div class="input-group mb-3">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >Company Address</span>
+			  </div>
+			  <textarea type="text" class="form-control" ng-model = "receipt_companyAddr"></textarea>
+			</div>
+			<div class="input-group mb-3">
+			  <div class="input-group-prepend">
+				<span class="input-group-text">Branch ID</span>
+			  </div>
+			  <input type="text" class="form-control" ng-model="receipt_branchId">
+			</div>
+
+			<div class="input-group mb-3">
+			  <div class="input-group-prepend">
+				<span class="input-group-text">Post Code</span>
+			  </div>
+			  <input type="text" class="form-control" ng-model="receipt_postCode">
+			</div>
+
+			<div class="input-group mb-3">
+			  <div class="input-group-prepend">
+				<span class="input-group-text" >eTax Receiving Email</span>
+			  </div>
+			  <input class="form-control" ng-model = "receipt_email" type="email">
+			</div>
+			<div class="text-center">
+				<!--<button type="button" class="btn btn-primary" ng-click="inputDone()" ng-disabled="!receipt_companyName||!receipt_companyAddr||!receipt_companyTaxCode||!receipt_email">Finish Input</button>-->
+				<button type="button" class="btn btn-primary" ng-click="inputDone()" >Finish Input</button>
+			</div>
+		</div>
+		<div class="alert alert-warning" ng-hide="step!='REVIEW'">
+			<h4 class="text-center">PLEASE CONFIRM THE INFORMATION YOU ENTERED BELOW IS CORRECT</h4>
+			<table class="table">
+			  <tbody>
+				<tr>
+					<th scope="row">Company Name: </th>
+					<td>{{receipt_companyName}}</td>
+				</tr>
+				<tr>
+					<th scope="row">Company Address: </th>
+					<td>{{receipt_companyAddr}}</td>
+				</tr>
+				<tr>
+					<th scope="row">Tax ID: </th>
+					<td>{{receipt_companyTaxCode}}</td>
+				</tr>
+				<tr>
+				  <th scope="row">Branch ID: </th>
+				  <td>{{receipt_branchId}}</td>
+				</tr>
+				<tr>
+				  <th scope="row">Post Code: </th>
+				  <td>{{receipt_postCode}}</td>
+				</tr>
+
+				<tr>
+					<th scope="row">Invoice Email: </th>
+					<td>{{receipt_email}}</td>
+				</tr>
+			  </tbody>
+			</table>
+			<div class="text-center">
+				<button type="button" class="btn btn-primary" ng-click="issue()" ng-disabled = "issueing">Issue eTax</button>
+				<button type="button" class="btn btn-primary" ng-click="reInput()" ng-disabled = "issueing">Re-enter</button>
+			</div>
+		</div>
+	  </div>
+	</div>
+	<script>
+		
+var app = angular.module('myApp', []);
+app.controller('myCtrl', function($scope, $http) {
+    var s = $scope;
+		var h = $http;
+		s.step = 'SCAN';
+		s.error = '';
+		s.receipt_header = null;
+		s.receipt_detail = null;
+		s.token = null;
+		s.store_no = 1;
+		s.server = "http://localhost:5004";
+		s.filepath = "F:\\Outsource\\PUMA_THAI_ETax\\eTax-for-customers\\queries\\";
+		s.workstation = "";
+		
+		
+		s.init = function()
+		{
+			// var settings = {
+                // "url": s.server +"/prism/api/auth/get-token",
+                // "method": "POST",
+                // "timeout": 0,
+                // "headers": {
+                  // "Content-Type": "application/json"
+                // },
+                // "data": JSON.stringify({"username":"admin","password":"1qaz@WSX"}),
+              // };
+			  // s.step = 'INPUT';
+              /*
+              $.ajax(settings).done(function (response) {
+				s.token = response.accessToken;
+
+				s.receipt_companyName = '';
+				s.receipt_companyAddr = '';
+				s.receipt_companyTaxCode = '';
+				s.receipt_email = '';
+			  });
+			  */
+			  
+			const urlParams = new URLSearchParams(window.location.search);
+			const id = urlParams.get("id");
+			const store_no = urlParams.get("store_no");
+			if (id) {
+				if(store_no == 3) 
+				{
+					s.server = "http://localhost:5004/";
+				}
+				if(store_no == 2) 
+				{
+					s.server = "http://localhost:5004/";
+				}
+				s.reportFilters = [];
+				s.receipt_sid = id
+				s.reportFilters.push({filterName:"#INVC_SID",filterOperator:"=",filterValue:s.receipt_sid});
+				s.reportFilters.push({filterName:"#STORE_NO",filterOperator:"=",filterValue:s.store_no});
+			
+					
+				settings = {
+					"url": s.server +"/prism/api/customer/get-invoice",
+					"method": "POST",
+					"timeout": 0,
+					"headers": {
+						"Content-Type": "application/json"
+					},
+					"data": JSON.stringify(
+						{
+							"billSid":s.receipt_sid
+						}),
+				};
+				  
+				  $.ajax(settings).done(function (response) {
+					  if(response.datas.length > 0)
+					  {
+							if (response.datas[0].PDFURL) {
+									setTimeout(function () {
+										s.error = 'E-INVOICE ISSUED';
+										s.$apply();
+									}, 100);
+							} else {
+								setTimeout(function () {
+										s.receipt_no = response.datas[0].RECEIPT_NO;
+										s.receipt_store = response.datas[0].RECEIPT_STORE;
+										s.receipt_datetime = response.datas[0].RECEIPT_DATETIME;
+										s.receipt_amount = response.datas[0].RECEIPT_AMOUNT;
+										s.einvoice_no = response.datas[0].PDFURL;
+										s.invc_sid = response.datas[0].INVC_SID;
+										s.customer = response.datas[0].CUSTOMER_NAME;
+										s.ref_sale_sid = response.datas[0].REF_SALE_SID;
+										s.step = 'INPUT';
+										//when scan successfully, clear previous entered data
+										s.receipt_companyName = '';
+										s.receipt_companyAddr = '';
+										s.receipt_companyTaxCode = '';
+										s.receipt_email = '';
+										s.receipt_branchId = '';
+										s.receipt_postCode = '';
+										
+										s.receipt_companyName = 'Test Company';
+										s.receipt_companyAddr = '1768 Thai Summit Tower';
+										s.receipt_companyTaxCode = '0000000000001';
+										s.receipt_branchId = '00000';
+										s.receipt_postCode = '10310';
+										s.receipt_email = 'cuongnt@Lbcint.com';
+										
+										s.$apply();
+									}, 100);
+								
+							}
+							
+					  }
+					  else
+					  { 
+						setTimeout(function () {
+							s.error = 'NOT FOUND';
+							s.$apply();
+						}, 100);
+					  }
+				  }).fail(function (jqXHR, textStatus, errorThrown) { 
+					  
+					  setTimeout(function () {
+							s.error = 'CONNECTION FAILED';
+							s.$apply();
+						}, 100);
+				   });
+				
+				
+			 
+
+				
+			} else {
+				setTimeout(function () {
+					s.error = 'NOT FOUND';
+					s.$apply();
+				}, 100);
+
+				
+			}
+
+		};
+		s.getVatInfo = function (){
+					let taxCode = s.receipt_companyTaxCode;
+                    let dataURI = `https://api.vietqr.io/v2/business/${taxCode}`;
+                    
+                    return $http({
+                        method: 'GET',
+                        url: dataURI,
+                        headers: {
+                            'Accept': 'application/json'
+                        }
+                    }).then(function (res) {
+                        console.log(res);
+                        
+                        if ((!res) || res.data.code !== "00") {
+                            alert(`Không tìm thấy thông tin mã số thuế ${taxCode}`);
+                        } else {
+							
+							
+                            // Extracting the relevant data from the response
+                            let companyData = res.data.data;
+							
+							setTimeout(function () {
+								s.receipt_companyName = companyData.name || '';
+								s.receipt_companyAddr = companyData.address || '';
+								s.$apply();
+							}, 100);
+                            
+                            
+
+                            // Debugging output
+                            console.log("Company Name: " + $scope.taxInfo.companyName);
+                            console.log("Address: " + $scope.taxInfo.address);
+                            console.log("Tax Code: " + $scope.taxInfo.taxCode);
+							
+									
+                        }
+                    }, function (err) {
+                        $LoadingScreen.Enable = false;
+                        alert("Xảy ra lỗi trong quá trình kiểm tra thông tin mã số thuế. Xin vui lòng thử lại sau!");
+                        console.log(err);
+                        return null;
+                    });
+		}
+		s.inputDone = function()
+		{
+			if(s.receipt_companyName == '' ||
+      s.receipt_companyAddr == '' ||
+      s.receipt_companyTaxCode == '' ||
+      s.receipt_email == '' ||
+      s.receipt_branchId == '' ||
+      s.receipt_postCode == '')
+			{
+				var r = alert("Invoice information is incomplete. Please fill in all required fields.");
+				
+			}
+			else
+				s.step = 'REVIEW';
+			
+		};
+		
+		s.reInput = function()
+		{
+		//	s.receipt_sid = "";
+			s.step = 'INPUT';
+		};
+		s.issue = function()
+		{
+			s.issueing = 1;
+			if (s.ref_sale_sid){
+								
+				settings = {
+					"url": s.server+"/prism/api/customer/adj-etax",
+					"method": "POST",
+					"timeout": 0,
+					"headers": {
+					"Content-Type": "application/json"
+					},
+					"data": JSON.stringify(
+						{
+							"CompanyVatName": s.receipt_companyName,
+							"CompanyVatCode": s.receipt_companyTaxCode,
+							"CompanyVatAddress": s.receipt_companyAddr,
+							"CompanyBranchId": s.receipt_branchId,   // map -> B05-BUYER_BRANCH_ID
+							"PostCode": s.receipt_postCode,           // map -> B10-BUYER_POST_CODE
+							"VatEmail": s.receipt_email,
+							"Terminal": s.workstation,
+							"BillSid":s.invc_sid,
+							"StoreCode":s.receipt_store
+							
+						}),
+				};
+			  
+				$.ajax(settings)
+				  .done(function (response) {
+				    s.issueing = 0;
+				
+				    if (response.PDFURL !== null && response.PDFURL !== '') {
+				      alert("The eTax will be sent to the email you just provided. Thank you!");
+				      s.step = 'SCAN';
+				      s.receipt_sid = "";
+				    } else {
+				      alert("eTax issuance failed! Please contact staff for assistance. " + response.einvoiceMessg);
+				    }
+				
+				    s.$apply();
+				  })
+				  .fail(function (jqXHR, textStatus, errorThrown) {
+				    s.issueing = 0;
+				    alert("Error connecting to the server. Please try again.");
+				    console.error("AJAX Error:", textStatus, errorThrown);
+				    s.$apply();
+				  });
+
+				
+			} else {
+					
+				settings = {
+					"url": s.server+"/prism/api/customer/create-etax",
+					"method": "POST",
+					"timeout": 0,
+					"headers": {
+					"Content-Type": "application/json"
+					},
+					"data": JSON.stringify(
+						{
+							"CompanyVatName": s.receipt_companyName,
+							"CompanyVatCode": s.receipt_companyTaxCode,
+							"CompanyVatAddress": s.receipt_companyAddr,
+							"CompanyBranchId": s.receipt_branchId,   // map -> B05-BUYER_BRANCH_ID
+							"PostCode": s.receipt_postCode,           // map -> B10-BUYER_POST_CODE
+							"VatEmail": s.receipt_email,
+							"Terminal": s.workstation,
+							"BillSid":s.invc_sid,
+							"StoreCode":s.receipt_store
+							
+						}),
+				};
+			  
+				$.ajax(settings)
+					  .done(function (response) {
+					    s.issueing = 0;
+					
+					    if (response.PDFURL !== null) {
+					      alert("The invoice will be sent to the email you just provided. Thank you!");
+					      s.step = 'SCAN';
+					      s.receipt_sid = "";
+					    } else {
+					      alert("Invoice issuance failed! Please contact staff for assistance. " + response.einvoiceMessg);
+					    }
+					
+					    s.$apply();
+					  })
+					  .fail(function (jqXHR, textStatus, errorThrown) {
+					    s.issueing = 0;
+					    alert("Error connecting to the server. Please try again.");
+					    console.error("AJAX Error:", textStatus, errorThrown);
+					    s.$apply();
+					  });
+
+			}
+			
+			
+		};
+		
+		
+			
+		$(document).ready(function(){
+			$scope.init();
+			$('#receipt_sid').bind('keypress', function(e) {
+				$scope.$apply(function(){
+				   
+				   if(e.keyCode==13){
+						s.reportFilters = [];
+						s.reportFilters.push({filterName:"#INVC_SID",filterOperator:"=",filterValue:s.receipt_sid});
+						s.reportFilters.push({filterName:"#STORE_NO",filterOperator:"=",filterValue:s.store_no});
+						//get token
+						settings = {
+							"url": s.server +"/prism/api/auth/get-token",
+							"method": "POST",
+							"timeout": 0,
+							"headers": {
+							  "Content-Type": "application/json"
+							},
+							"data": JSON.stringify({"username":"admin","password":"1qaz@WSX"}),
+						  };
+						  
+						  $.ajax(settings).done(function (response) {
+							s.token = response.accessToken;
+							
+							settings = {
+								"url": s.server +"/prism/api/GetPrismData/filter",
+								"method": "POST",
+								"timeout": 0,
+								"headers": {
+									"Authorization": "Bearer " + s.token,
+									"Content-Type": "application/json"
+								},
+								"data": JSON.stringify(
+									{
+										"filepath":s.filepath+"EInvoice_searchSingleReceipt.txt",
+										"folderpath": "string",
+										"fileExtention":"string",
+										"reportFilters":s.reportFilters
+									}),
+							};
+						  
+						  $.ajax(settings).done(function (response) {
+							  if(response.datas[0].data.length > 0)
+							  {
+								  if(response.datas[0].data[0].HD.trim() !='' )
+								  {
+									s.error = 'E-INVOICE ISSUED';
+								  }
+								  else{
+									s.receipt_no = response.datas[0].data[0].RECEIPT_NO;
+									s.receipt_store = response.datas[0].data[0].RECEIPT_STORE;
+									s.receipt_datetime = response.datas[0].data[0].RECEIPT_DATETIME;
+									s.receipt_amount = response.datas[0].data[0].RECEIPT_AMOUNT;
+									s.receipt_disc_amt = response.datas[0].data[0].DISC_AMT;
+									s.receipt_disc_perc = response.datas[0].data[0].DISC_PERC;
+									s.invc_sid = response.datas[0].data[0].INVC_SID;
+									s.step = 'INPUT';
+									
+									//when scan successfully, clear previous entered data
+									s.receipt_companyName = '';
+									s.receipt_companyAddr = '';
+									s.receipt_companyTaxCode = '';
+									s.receipt_email = '';
+									s.receipt_branchId = '';
+									s.receipt_postCode = '';
+									
+								  }
+								
+							  }
+							  else
+							  {
+								s.error = 'NOT FOUND';
+							  }
+						  });
+						
+						
+						//  s.receipt_sid = "";
+						s.$apply();
+						
+						setTimeout(function () {
+							 $("#receipt_sid").blur();// Bỏ focus khỏi input
+						}, 100);
+
+						
+					  }).fail(function (jqXHR, textStatus, errorThrown) { 
+						  s.error = 'CONNECTION FAILED';
+					   });
+						
+						
+					}
+				});
+			
+			});
+		});
+		
+});
+	</script>
+  </body>
+</html>
