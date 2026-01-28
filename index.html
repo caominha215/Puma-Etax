@@ -437,7 +437,7 @@ app.controller('myCtrl', function($scope, $http) {
 					  .done(function (response) {
 					    s.issueing = 0;
 					
-					    if (response.PDFURL !== null) {
+					    if (response.einvoiceMessg == "OK") {
 					      alert("The invoice will be sent to the email you just provided. Thank you!");
 					      s.step = 'SCAN';
 					      s.receipt_sid = "";
@@ -559,5 +559,6 @@ app.controller('myCtrl', function($scope, $http) {
 	</script>
   </body>
 </html>
+
 
 
