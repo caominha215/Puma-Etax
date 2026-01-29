@@ -34,7 +34,7 @@
 	  <div id ="containerID" class="container">
 		<div class="row justify-content-md-center">
 			<h2 class="text-center"><img style="width:50%" src="./pics/logo.png" class="img-thumbnail" ></h2>
-			<h3 class="text-center">FOR CUSTOMERS TO PROVIDE eTAX INFORMATION</h3>
+			<h3 class="text-center">For customers to provide e-Tax Invoice Information / สำหรับลูกค้าเพื่อให้ข้อมูลใบกำกับภาษีอิเล็กทรอนิกส์</h3>
 		</div>
 		<div class="alert alert-secondary" ng-hide="step!='SCAN'">
 			<!-- <h4 class="text-center">PLEASE SCAN THE BARCODE ON YOUR BILL</h4> -->
@@ -55,10 +55,10 @@
 			<table class="table">
 			  <thead>
 				<tr>
-				  <th scope="col">Receipt No.</th>
-				  <th scope="col">Store</th>
-				  <th scope="col">Date</th>
-				  <th scope="col">Total Amount</th>
+				  <th scope="col">Receipt No. / ใบเสร็จเลขที่</th>
+				  <th scope="col">Store / สาขา</th>
+				  <th scope="col">Date / วันที่</th>
+				  <th scope="col">Total Amount / ยอดรวม</th>
 				</tr>
 			  </thead>
 			  <tbody>
@@ -75,40 +75,40 @@
 			<!--<h4 class="text-center">PLEASE ENTER IN VIETNAMESE WITH TONE MARKS</h4>-->
 			<div class="input-group mb-3">
 			  <div class="input-group-prepend">
-				<span class="input-group-text" >Tax Code</span>
+				<span class="input-group-text" >Customer Tax ID / เลขประจำตัวผู้เสียภาษีอากร</span>
 			  </div>
 			  <input type="text" class="form-control" ng-model = "receipt_companyTaxCode">
 			  <!--<button type="button" class="btn btn-primary" ng-click="getVatInfo()" >Get Info</button>-->
 			</div>
 			<div class="input-group mb-3">
 			  <div class="input-group-prepend">
-				<span class="input-group-text" >Company Name</span>
+				<span class="input-group-text" >Customer Name / ชื่อลูกค้า</span>
 			  </div>
 			  <input type="text" class="form-control" ng-model = "receipt_companyName ">
 			</div>
 			<div class="input-group mb-3">
 			  <div class="input-group-prepend">
-				<span class="input-group-text" >Company Address</span>
+				<span class="input-group-text" >Customer Address / ที่อยู่ลูกค้า</span>
 			  </div>
 			  <textarea type="text" class="form-control" ng-model = "receipt_companyAddr"></textarea>
 			</div>
 			<div class="input-group mb-3">
 			  <div class="input-group-prepend">
-				<span class="input-group-text">Branch ID</span>
+				<span class="input-group-text">Customer Branch Number / สาขาที่</span>
 			  </div>
 			  <input type="text" class="form-control" ng-model="receipt_branchId">
 			</div>
 
 			<div class="input-group mb-3">
 			  <div class="input-group-prepend">
-				<span class="input-group-text">Post Code</span>
+				<span class="input-group-text">Postal Code / รหัสไปรษณีย์</span>
 			  </div>
 			  <input type="text" class="form-control" ng-model="receipt_postCode">
 			</div>
 
 			<div class="input-group mb-3">
 			  <div class="input-group-prepend">
-				<span class="input-group-text" >eTax Receiving Email</span>
+				<span class="input-group-text" >e-Tax Invoice Receiving Email / อีเมลสำหรับรับใบกำกับภาษีอิเล็กทรอนิกส์</span>
 			  </div>
 			  <input class="form-control" ng-model = "receipt_email" type="email">
 			</div>
@@ -118,39 +118,39 @@
 			</div>
 		</div>
 		<div class="alert alert-warning" ng-hide="step!='REVIEW'">
-			<h4 class="text-center">PLEASE CONFIRM THE INFORMATION YOU ENTERED BELOW IS CORRECT</h4>
+			<h4 class="text-center">PLEASE CONFIRM THE INFORMATION YOU ENTERED BELOW IS CORRECT / โปรดยืนยันว่าข้อมูลที่คุณกรอกด้านล่างถูกต้อง</h4>
 			<table class="table">
 			  <tbody>
 				<tr>
-					<th scope="row">Company Name: </th>
+					<th scope="row">Customer Name / ชื่อลูกค้า</th>
 					<td>{{receipt_companyName}}</td>
 				</tr>
 				<tr>
-					<th scope="row">Company Address: </th>
+					<th scope="row">Customer Address / ที่อยู่ลูกค้า</th>
 					<td>{{receipt_companyAddr}}</td>
 				</tr>
 				<tr>
-					<th scope="row">Tax ID: </th>
+					<th scope="row">Customer Tax ID / เลขประจำตัวผู้เสียภาษีอากร</th>
 					<td>{{receipt_companyTaxCode}}</td>
 				</tr>
 				<tr>
-				  <th scope="row">Branch ID: </th>
+				  <th scope="row">Customer Branch Number / สาขาที่</th>
 				  <td>{{receipt_branchId}}</td>
 				</tr>
 				<tr>
-				  <th scope="row">Post Code: </th>
+				  <th scope="row">Postal Code / รหัสไปรษณีย์</th>
 				  <td>{{receipt_postCode}}</td>
 				</tr>
 
 				<tr>
-					<th scope="row">Invoice Email: </th>
+					<th scope="row">e-Tax Invoice Receiving Email / อีเมลสำหรับรับใบกำกับภาษีอิเล็กทรอนิกส์</th>
 					<td>{{receipt_email}}</td>
 				</tr>
 			  </tbody>
 			</table>
 			<div class="text-center">
-				<button type="button" class="btn btn-primary" ng-click="issue()" ng-disabled = "issueing">Issue eTax</button>
-				<button type="button" class="btn btn-primary" ng-click="reInput()" ng-disabled = "issueing">Re-enter</button>
+				<button type="button" class="btn btn-primary" ng-click="issue()" ng-disabled = "issueing">Issue e-Tax Invoice / ออกใบกำกับภาษีอิเล็กทรอนิกส์</button>
+				<button type="button" class="btn btn-primary" ng-click="reInput()" ng-disabled = "issueing">Re-enter / กรอกใหม่</button>
 			</div>
 		</div>
 	  </div>
@@ -559,6 +559,7 @@ app.controller('myCtrl', function($scope, $http) {
 	</script>
   </body>
 </html>
+
 
 
 
