@@ -37,19 +37,33 @@
 			<h3 class="text-center">For customers to provide e-Tax Invoice Information / สำหรับลูกค้าเพื่อให้ข้อมูลใบกำกับภาษีอิเล็กทรอนิกส์</h3>
 		</div>
 		  <div class="mb-3">
-		  <label class="form-label fw-bold">
-		    Customer Type / ประเภทลูกค้า
-		  </label>
-		  <div class="form-check form-switch">
-		    <input class="form-check-input"
-		           type="checkbox"
-		           id="customerTypeSwitch"
-		           ng-model="isCompany">
-		    <label class="form-check-label" for="customerTypeSwitch">
-		      {{ isCompany ? 'Individual (บุคคลธรรมดา)' : 'Company (นิติบุคคล)' }}
-		    </label>
-		  </div>
-		</div>
+			  <label class="fw-bold">Customer Type / ประเภทลูกค้า</label>
+			
+			  <div class="form-check">
+			    <input class="form-check-input"
+			           type="radio"
+			           name="customerType"
+			           id="individual"
+			           value="INDIVIDUAL"
+			           ng-model="receipt_customerType">
+			    <label class="form-check-label" for="individual">
+			      Individual (บุคคลธรรมดา)
+			    </label>
+			  </div>
+			
+			  <div class="form-check">
+			    <input class="form-check-input"
+			           type="radio"
+			           name="customerType"
+			           id="company"
+			           value="COMPANY"
+			           ng-model="receipt_customerType">
+			    <label class="form-check-label" for="company">
+			      Company (นิติบุคคล)
+			    </label>
+			  </div>
+			</div>
+
 
 		<div class="alert alert-secondary" ng-hide="step!='SCAN'">
 			<!-- <h4 class="text-center">PLEASE SCAN THE BARCODE ON YOUR BILL</h4> -->
@@ -117,7 +131,7 @@
 			         class="form-control"
 			         ng-model="receipt_branchId"
 			         ng-required="isCompany"
-			         ng-disabled="!isCompany"
+			        
 			         placeholder="{{ isCompany ? 'Required for Company' : 'Not required for Individual' }}">
 			</div>
 
@@ -364,11 +378,12 @@ app.controller('myCtrl', function($scope, $http) {
 		s.inputDone = function()
 		{
 			if(s.receipt_companyName == '' ||
-      s.receipt_companyAddr == '' ||
-      s.receipt_companyTaxCode == '' ||
-      s.receipt_email == '' ||
-      s.receipt_branchId == '' ||
-      s.receipt_postCode == '')
+    s.receipt_companyAddr == '' ||
+    s.receipt_companyTaxCode == '' ||
+    s.receipt_email == '' ||
+    s.receipt_postCode == '' ||
+    !s.receipt_customerType || 
+    (s.receipt_customerType === 'COMPANY' && s.receipt_branchId == ''))
 			{
 				var r = alert("Invoice information is incomplete. Please fill in all required fields.");
 				
@@ -582,6 +597,7 @@ app.controller('myCtrl', function($scope, $http) {
 	</script>
   </body>
 </html>
+
 
 
 
