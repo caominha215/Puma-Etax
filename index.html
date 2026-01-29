@@ -36,6 +36,21 @@
 			<h2 class="text-center"><img style="width:50%" src="./pics/logo.png" class="img-thumbnail" ></h2>
 			<h3 class="text-center">For customers to provide e-Tax Invoice Information / สำหรับลูกค้าเพื่อให้ข้อมูลใบกำกับภาษีอิเล็กทรอนิกส์</h3>
 		</div>
+		  <div class="mb-3">
+		  <label class="form-label fw-bold">
+		    Customer Type / ประเภทลูกค้า
+		  </label>
+		  <div class="form-check form-switch">
+		    <input class="form-check-input"
+		           type="checkbox"
+		           id="customerTypeSwitch"
+		           ng-model="isCompany">
+		    <label class="form-check-label" for="customerTypeSwitch">
+		      {{ isCompany ? 'Company (นิติบุคคล)' : 'Individual (บุคคลธรรมดา)' }}
+		    </label>
+		  </div>
+		</div>
+
 		<div class="alert alert-secondary" ng-hide="step!='SCAN'">
 			<!-- <h4 class="text-center">PLEASE SCAN THE BARCODE ON YOUR BILL</h4> -->
 			<!-- <input type="text" class="form-control" placeholder="Scan bill barcode" ng-model="receipt_sid"  -->
@@ -94,10 +109,18 @@
 			</div>
 			<div class="input-group mb-3">
 			  <div class="input-group-prepend">
-				<span class="input-group-text">Customer Branch Number / สาขาที่</span>
+			    <span class="input-group-text">
+			      Customer Branch Number / สาขาที่
+			    </span>
 			  </div>
-			  <input type="text" class="form-control" ng-model="receipt_branchId">
+			  <input type="text"
+			         class="form-control"
+			         ng-model="receipt_branchId"
+			         ng-required="isCompany"
+			         ng-disabled="!isCompany"
+			         placeholder="{{ isCompany ? 'Required for Company' : 'Not required for Individual' }}">
 			</div>
+
 
 			<div class="input-group mb-3">
 			  <div class="input-group-prepend">
@@ -559,6 +582,7 @@ app.controller('myCtrl', function($scope, $http) {
 	</script>
   </body>
 </html>
+
 
 
 
