@@ -76,7 +76,7 @@
 				CONNECTION ERROR!
 			  </div>
 			<div class="alert alert-danger" role="alert" ng-if="error=='E-INVOICE ISSUED'">
-			  THIS SALE RECEPT HAS ALREADY BEEN ISSUED AN ETAX!
+			  THIS SALE RECEPT HAS ALREADY BEEN ISSUED AN e-Tax Invoice! / ใบเสร็จนี้ได้มีการออกใบกำกับภาษีอิเล็กทรอนิกส์แล้ว!
 			</div>
 		</div>
 		<div class="alert alert-primary" ng-hide="step!='INPUT'">
@@ -132,7 +132,7 @@
 			         ng-model="receipt_branchId"
 			         ng-required="isCompany"
 			        
-			         placeholder="{{ isCompany ? 'Required for Company' : 'Not required for Individual' }}">
+			         placeholder="{{ isCompany ? 'Required for Company' : 'Not required for individual / ไม่จำเป็นสำหรับบุคคลธรรมดา' }}">
 			</div>
 
 
@@ -151,7 +151,7 @@
 			</div>
 			<div class="text-center">
 				<!--<button type="button" class="btn btn-primary" ng-click="inputDone()" ng-disabled="!receipt_companyName||!receipt_companyAddr||!receipt_companyTaxCode||!receipt_email">Finish Input</button>-->
-				<button type="button" class="btn btn-primary" ng-click="inputDone()" >Finish Input</button>
+				<button type="button" class="btn btn-primary" ng-click="inputDone()" >Finish input / เสร็จสิ้นการกรอกข้อมูล</button>
 			</div>
 		</div>
 		<div class="alert alert-warning" ng-hide="step!='REVIEW'">
@@ -385,14 +385,19 @@ app.controller('myCtrl', function($scope, $http) {
     !s.receipt_customerType || 
     (s.receipt_customerType === 'COMPANY' && s.receipt_branchId == ''))
 			{
-				var r = alert("Invoice information is incomplete. Please fill in all required fields.");
+				var r = alert("Invoice information is incomplete. Please fill in all required fields / ข้อมูลใบแจ้งหนี้ไม่ครบถ้วน กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน");
 				
 			}
 			else
 				s.step = 'REVIEW';
 			
 		};
-		
+		s.$watch('receipt_customerType', function (val) {
+		    if (val === 'INDIVIDUAL') {
+		        s.receipt_branchId = '00000';
+		    } 
+		});
+
 		s.reInput = function()
 		{
 		//	s.receipt_sid = "";
@@ -476,7 +481,7 @@ app.controller('myCtrl', function($scope, $http) {
 					    s.issueing = 0;
 					
 					    if (response.einvoiceMessg == "OK") {
-					      alert("The invoice will be sent to the email you just provided. Thank you!");
+					      alert("The e-Tax Invoice will be sent to the email you just provided. Thank you! / ใบกำกับภาษีอิเล็กทรอนิกส์จะถูกส่งไปยังอีเมลที่คุณระบุไว้ ขอบคุณค่ะ!");
 					      s.step = 'SCAN';
 					      s.receipt_sid = "";
 					    } else {
@@ -597,6 +602,7 @@ app.controller('myCtrl', function($scope, $http) {
 	</script>
   </body>
 </html>
+
 
 
 
