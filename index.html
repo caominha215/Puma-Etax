@@ -395,7 +395,9 @@ app.controller('myCtrl', function($scope, $http) {
 		s.$watch('receipt_customerType', function (val) {
 		    if (val === 'INDIVIDUAL') {
 		        s.receipt_branchId = '00000';
-		    } 
+		    } else {
+		        $scope.receipt_branchId = '';
+		    }
 		});
 
 		s.reInput = function()
@@ -602,6 +604,7 @@ app.controller('myCtrl', function($scope, $http) {
 	</script>
   </body>
 </html>
+
 
 
 
