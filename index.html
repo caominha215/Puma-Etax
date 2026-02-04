@@ -394,7 +394,7 @@ app.controller('myCtrl', function($scope, $http) {
 		};
 		s.$watch('receipt_customerType', function (val) {
 		    if (val === 'INDIVIDUAL') {
-		        s.receipt_branchId = '00000';
+		        s.receipt_branchId = '';
 		    } else {
 		        $scope.receipt_branchId = '';
 		    }
@@ -473,7 +473,8 @@ app.controller('myCtrl', function($scope, $http) {
 							"VatEmail": s.receipt_email,
 							"Terminal": s.workstation,
 							"BillSid":s.invc_sid,
-							"StoreCode":s.receipt_store
+							"StoreCode":s.receipt_store,
+							"TaxIdType": (s.receipt_customerType === 'COMPANY') ? 'TXID' : 'NIDN'
 							
 						}),
 				};
@@ -604,6 +605,7 @@ app.controller('myCtrl', function($scope, $http) {
 	</script>
   </body>
 </html>
+
 
 
 
