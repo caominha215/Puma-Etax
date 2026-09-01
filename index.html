@@ -292,6 +292,10 @@ app.controller('myCtrl', function($scope, $http) {
 				{
 					s.server = "https://thro0007-mtt-etax.ngrok.app";
 				}
+				if(store_no == 42) 
+				{
+					s.server = "https://thro0008-spo-etax.ngrok.app";
+				}
 				s.reportFilters = [];
 				s.receipt_sid = id
 				s.reportFilters.push({filterName:"#INVC_SID",filterOperator:"=",filterValue:s.receipt_sid});
